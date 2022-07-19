@@ -1,10 +1,13 @@
 Package: XLConnectXTRA
-Title: What the Package Does (One Line, Title Case)
+Title: Extends XLConnect in an opinionated way for templated Excel reporting
 Version: 0.0.0.9000
 Authors@R: 
-    person("Brandon", "Farr", , "bcfcodes@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Brandon", "Farr", , "bcfcodes@gmail.com", role = c("aut", "cre"))
+Description: Convenience functions for working with Excel "reporting" templates.
+    Assumes a workflow beginning with an Excel report template with named
+    ranges. An R script will build up reportable items and then call these
+    convenience functions to simply and consistently write reporting data
+    to proper template locations.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en
