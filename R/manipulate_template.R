@@ -1,4 +1,19 @@
-
+#' Load an Excel reporting template
+#'
+#' Returns a list with a reference to the workbook object and vector of
+#' template names.
+#'
+#' @param template_name path to Excel template
+#'
+#' @returns
+#' a list with a reference to the workbook object and vector of
+#' template names.
+#'
+#' @examples
+#'
+#' \dontrun{
+#' report_obj <- load_xl_template("templates/report_template.xlsx")
+#' }
 #' @export
 load_xl_template <- function(template_name) {
   wb <- XLConnect::loadWorkbook(template_name)
@@ -16,6 +31,21 @@ load_xl_template <- function(template_name) {
   )
 }
 
+#' Duplicate a template within an Excel reporting template workbook
+#'
+#' Modifies the wb object
+#'
+#' @param template_name path to Excel template
+#'
+#' @returns
+#' a list with a reference to the workbook object and vector of
+#' template names.
+#'
+#' @examples
+#'
+#' \dontrun{
+#' wb_obj <- load_xl_template("templates/report_template.xlsx")
+#' }
 #' @export
 duplicate_template_sheet <- function(wb, template_name, uniq_name) {
   XLConnect::cloneSheet(wb, sheet = template_name, name = uniq_name)
@@ -69,7 +99,11 @@ get_named_ranges_for_sheet <- function(wb, sheet_name) {
 
 
 #' @export
-cleanup_template <- function(wb, templates) {
+cleanup_template <- function(rpt_obj) {
+
+  wb <- rpt_obj$wb
+  templates <- rpt_obj$templates
+
   for (i in 1:length(templates)) {
     XLConnect::removeSheet(wb, templates[i])
 
@@ -249,7 +283,7 @@ update_report_names <- function(lst, prefix, sep = "_") {
 }
 
 #' @export
-write_report_object <- function(xl_obj, data_obj) {
+write_report_object <- function(xl_obj, data_obj, os = TRUE) {
   XLConnect::setStyleAction(xl_obj, XLConnect::XLC$"STYLE_ACTION.NONE")
 
   obj_type <- attr(data_obj, "type")
@@ -279,7 +313,7 @@ write_report_object <- function(xl_obj, data_obj) {
       xl_obj,
       tmp_fig_file,
       attr(data_obj, "name"),
-      originalSize = FALSE
+      originalSize = os
     )
 
     # remove temp file
@@ -300,13 +334,13 @@ write_report_object <- function(xl_obj, data_obj) {
 }
 
 #' @export
-report_reportables <- function(xl_obj, tpl_name, instance_name, rpt_list) {
-  duplicate_template_sheet(xl_obj, tpl_name, instance_name)
+report_reportables <- function(xl_obj, tpl_name, instance_name, rpt_list, os = TRUE) {
+  duplicate_template_sheet(xl_obj$wb, tpl_name, instance_name)
 
   # update names in rpt_list
   rpt_list <- update_report_names(rpt_list, instance_name)
 
   for (i in 1:length(rpt_list)) {
-    write_report_object(xl_obj, rpt_list[[i]])
+    write_report_object(xl_obj$wb, rpt_list[[i]], os)
   }
 }
