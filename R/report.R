@@ -20,11 +20,16 @@
 #' mtc <- make_reportable(mtc, "mtcars_data", TRUE)
 #'
 #' @export
-make_reportable <- function(obj, name, incl_header = TRUE, dims = NULL) {
+make_reportable <- function(
+    obj, name, incl_header = TRUE, dims = NULL,
+    os = NULL, scale = NULL
+) {
   attr(obj, "name") <- name
   attr(obj, "type") <- get_base_class(obj)
   attr(obj, "incl_header") <- incl_header
   attr(obj, "dims") <- dims
+  attr(obj, "os") <- os
+  attr(obj, "scale") <- scale
 
   return(obj)
 }

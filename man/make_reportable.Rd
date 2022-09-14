@@ -4,7 +4,14 @@
 \alias{make_reportable}
 \title{Add attributes required for "reporting" workflow}
 \usage{
-make_reportable(obj, name, incl_header = TRUE, dims = NULL)
+make_reportable(
+  obj,
+  name,
+  incl_header = TRUE,
+  dims = NULL,
+  os = NULL,
+  scale = NULL
+)
 }
 \arguments{
 \item{obj}{Vector of length 1, data.frame or ggplot object}

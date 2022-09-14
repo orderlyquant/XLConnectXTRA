@@ -283,7 +283,7 @@ update_report_names <- function(lst, prefix, sep = "_") {
 }
 
 #' @export
-write_report_object <- function(xl_obj, data_obj, os = TRUE) {
+write_report_object <- function(xl_obj, data_obj) {
   XLConnect::setStyleAction(xl_obj, XLConnect::XLC$"STYLE_ACTION.NONE")
 
   obj_type <- attr(data_obj, "type")
@@ -299,6 +299,8 @@ write_report_object <- function(xl_obj, data_obj, os = TRUE) {
 
   if (obj_type == "ggplot") {
     fig_dims <- attr(data_obj, "dims")
+    original_size = attr(data_obj, "os")
+    scale = attr(data_obj, "scale")
 
     tmp_fig_file <- fs::file_temp(
       tmp_dir = here::here(), ext = "png"
@@ -307,13 +309,14 @@ write_report_object <- function(xl_obj, data_obj, os = TRUE) {
     ggplot2::ggsave(
       tmp_fig_file, data_obj,
       height = fig_dims[1], width = fig_dims[2], dpi = 288,
-      bg = "white"
+      bg = "white",
+      scale = scale
     )
     XLConnect::addImage(
       xl_obj,
       tmp_fig_file,
       attr(data_obj, "name"),
-      originalSize = os
+      originalSize = original_size
     )
 
     # remove temp file
@@ -334,13 +337,13 @@ write_report_object <- function(xl_obj, data_obj, os = TRUE) {
 }
 
 #' @export
-report_reportables <- function(xl_obj, tpl_name, instance_name, rpt_list, os = TRUE) {
+report_reportables <- function(xl_obj, tpl_name, instance_name, rpt_list) {
   duplicate_template_sheet(xl_obj$wb, tpl_name, instance_name)
 
   # update names in rpt_list
   rpt_list <- update_report_names(rpt_list, instance_name)
 
   for (i in 1:length(rpt_list)) {
-    write_report_object(xl_obj$wb, rpt_list[[i]], os)
+    write_report_object(xl_obj$wb, rpt_list[[i]])
   }
 }
