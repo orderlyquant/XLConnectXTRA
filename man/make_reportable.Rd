@@ -9,7 +9,7 @@ make_reportable(
   name,
   incl_header = TRUE,
   dims = NULL,
-  os = NULL,
+  os = FALSE,
   scale = NULL
 )
 }

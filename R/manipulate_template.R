@@ -310,8 +310,7 @@ write_report_object <- function(xl_obj, data_obj) {
       tmp_fig_file, data_obj,
       height = fig_dims[1], width = fig_dims[2], dpi = 288,
       bg = "white",
-      scale = scale,
-      type = "cairo"
+      scale = scale
     )
     XLConnect::addImage(
       xl_obj,

@@ -22,7 +22,7 @@
 #' @export
 make_reportable <- function(
     obj, name, incl_header = TRUE, dims = NULL,
-    os = NULL, scale = NULL
+    os = FALSE, scale = NULL
 ) {
   attr(obj, "name") <- name
   attr(obj, "type") <- get_base_class(obj)
